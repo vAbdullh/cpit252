@@ -12,20 +12,21 @@ import java.io.InputStream;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Firebase {
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
-    private static final String SECRETS_PATH = "/etc/secrets/firebase-adminsdk-secrets.json";
+public class Firebase {
 
     public static void init() {
         if (FirebaseApp.getApps().isEmpty()) {
             try {
-                InputStream serviceAccount = Firebase.class
-                        .getClassLoader()
-                        .getResourceAsStream(SECRETS_PATH);
-
-                if (serviceAccount == null) {
-                    throw new RuntimeException("Firebase secret is missing");
+                String credentials = System.getenv("FIREBASE_CREDENTIALS");
+                if (credentials == null || credentials.isEmpty()) {
+                     throw new RuntimeException("Environment variable FIREBASE_CREDENTIALS is missing");
                 }
+
+                InputStream serviceAccount = new ByteArrayInputStream(credentials.getBytes(StandardCharsets.UTF_8));
+                
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                         .build();
