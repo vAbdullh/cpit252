@@ -8,6 +8,7 @@ import com.google.firebase.cloud.FirestoreClient;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -18,7 +19,13 @@ public class Firebase {
     public static void init() {
         if (FirebaseApp.getApps().isEmpty()) {
             try {
-                FileInputStream serviceAccount = new FileInputStream(SECRETS_PATH);
+                InputStream serviceAccount = Firebase.class
+                        .getClassLoader()
+                        .getResourceAsStream("firebase-adminsdk-secrets.json");
+
+                if (serviceAccount == null) {
+                    throw new RuntimeException("Firebase secret is missing");
+                }
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                         .build();
