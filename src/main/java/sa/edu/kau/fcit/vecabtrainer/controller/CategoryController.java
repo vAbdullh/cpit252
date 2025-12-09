@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sa.edu.kau.fcit.vecabtrainer.config.FirestoreInit;
+import sa.edu.kau.fcit.vecabtrainer.config.Firebase;
 import sa.edu.kau.fcit.vecabtrainer.model.Category;
 
 @RestController
@@ -22,7 +22,7 @@ public class CategoryController {
     @GetMapping("/categories")
     public List<Category> getAllCategories() {
         logger.info("Request received: GET /categories");
-        Firestore db = FirestoreInit.getFirestore();
+        Firestore db = Firebase.getFirestore();
         try {
             ApiFuture<QuerySnapshot> future = db.collection("categories").get();
             List<QueryDocumentSnapshot> documents = future.get().getDocuments();

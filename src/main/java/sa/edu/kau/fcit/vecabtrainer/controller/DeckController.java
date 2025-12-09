@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import sa.edu.kau.fcit.vecabtrainer.config.FirestoreInit;
+import sa.edu.kau.fcit.vecabtrainer.config.Firebase;
 import sa.edu.kau.fcit.vecabtrainer.model.Deck;
 
 @RestController
@@ -24,7 +24,7 @@ public class DeckController {
     @GetMapping("/decks/{category}")
     public List<Deck> getDeckByCategory(@PathVariable String category) {
         logger.info("Request received: GET /decks/{}", category);
-        Firestore db = FirestoreInit.getFirestore();
+        Firestore db = Firebase.getFirestore();
         try {
             ApiFuture<QuerySnapshot> future = db.collection("decks").whereEqualTo("category", category).get();
             List<QueryDocumentSnapshot> documents = future.get().getDocuments();
