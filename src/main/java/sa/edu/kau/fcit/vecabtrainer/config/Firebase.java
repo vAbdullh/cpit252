@@ -14,14 +14,14 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Firebase {
 
-    private static final String SECRETS_PATH = "src/main/resources/firebase-adminsdk-secrets.json";
+    private static final String SECRETS_PATH = "/etc/secrets/firebase-adminsdk-secrets.json";
 
     public static void init() {
         if (FirebaseApp.getApps().isEmpty()) {
             try {
                 InputStream serviceAccount = Firebase.class
                         .getClassLoader()
-                        .getResourceAsStream("firebase-adminsdk-secrets.json");
+                        .getResourceAsStream(SECRETS_PATH);
 
                 if (serviceAccount == null) {
                     throw new RuntimeException("Firebase secret is missing");
